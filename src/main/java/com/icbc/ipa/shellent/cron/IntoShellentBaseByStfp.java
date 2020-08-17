@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 @Slf4j
 @Component
 public class IntoShellentBaseByStfp {
@@ -17,6 +19,10 @@ public class IntoShellentBaseByStfp {
 
     @Scheduled(cron = "${entdata.into-base-sftp}")
     public void intoBaseBySftp(){
-        shellentService.intoDatabase("/data/20200814");
+        try {
+            shellentService.intoDatabase("/data/20200817");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
