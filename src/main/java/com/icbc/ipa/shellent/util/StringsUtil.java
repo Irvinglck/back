@@ -55,6 +55,7 @@ public class StringsUtil {
         System.out.println(md5);
 
         String okMD5 = "beb11b6d34bece559f5a614ae04b7dff";
+
         System.out.println("md5 校验结果：" + md5.equals(okMD5));
 
     }

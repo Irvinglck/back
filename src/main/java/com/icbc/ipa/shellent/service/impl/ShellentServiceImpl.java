@@ -3,6 +3,7 @@ package com.icbc.ipa.shellent.service.impl;
 import com.icbc.ipa.shellent.service.SftpService;
 import com.icbc.ipa.shellent.service.ShellentService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,40 +58,14 @@ public class ShellentServiceImpl implements ShellentService {
         String sftpFilePath = sshelent + "/" + zipFiles.get(0);
         log.info("sftp下载路径:->{}", sftpFilePath);
         inputStream = sftpService.getInputStream(sftpFilePath);
+        String md5 = DigestUtils.md5Hex(inputStream);
         String ok = sftpFilePath.replaceAll("\\.zip", "\\.ok");
-//        inputStream = sftpService.getInputStream(sftpFilePath);
-        String path = "D:\\plugman.zip";
-        ZipInputStream zin = new ZipInputStream(inputStream, Charset.forName("GBK"));
-        ZipEntry ze;
-        try {
-            while((ze=zin.getNextEntry())!=null){
-                BufferedReader br = new BufferedReader(new InputStreamReader(zin));
-                String line;
-                StringBuilder sb = new StringBuilder();
-                while ((line = br.readLine()) != null) {
-//                    sb.append(line.toString().trim());
-                    System.out.println(line.toString().trim());
-                }
-                System.out.println(Thread.currentThread().getName() + " :: " + ze.getName() + " :: " + sb.toString());
-                br.close();
-
-                break;
-            }
-            System.out.println();
-            System.out.println();
-        }catch (IOException e){
-
-        }finally {
-            if (zin != null) {
-                try {
-                    zin.closeEntry();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-
+        inputStream = sftpService.getInputStream(ok);
+        String s = "beb11b6d34bece559f5a614ae04b7dff";
+        boolean equals = md5.equals(s);
+        System.out.println(equals);
+        System.out.println(s);
+        inputStream.close();
 
     }
 
