@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.icbc.ipa.shellent.dao.TraceLogDao">
+
+    <sql id="BASE_COLUMN">
+         Id,LogLevel,Category,Keywords,Details,LoginTime
+    </sql>
+
+    <sql id="BASE_TABLE">
+  	  TraceLog
+    </sql>
+
+    <insert id="addOne" parameterType="com.icbc.ipa.shellent.model.TraceLog">
+        INSERT INTO
+        <include refid="BASE_TABLE"/>
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="LogLevel != null">
+                LogLevel,
+            </if>
+            <if test="Category != null">
+                Category,
+            </if>
+            <if test="Keywords != null">
+                Keywords,
+            </if>
+            <if test="Details != null">
+                Details,
+            </if>
+            <if test="LoginTime != null">
+                LoginTime,
+            </if>
+        </trim>
+        <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
+            <if test="LogLevel != null">
+                #{LogLevel},
+            </if>
+            <if test="Category != null">
+                #{Category},
+            </if>
+            <if test="Keywords != null">
+                #{Keywords},
+            </if>
+            <if test="Details != null">
+                #{Details},
+            </if>
+            <if test="LoginTime != null">
+                #{LoginTime},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="findOne" resultType="com.icbc.ipa.shellent.model.TraceLog" parameterType="com.icbc.ipa.shellent.model.TraceLog">
+        select <include refid="BASE_COLUMN"/> from <include refid="BASE_TABLE"/>
+        where  Keywords=#{Keywords}
+    </select>
+    
+    <select id="findByKeyWords" parameterType="java.lang.String" resultType="java.lang.String">
+        select Category from TraceLog where Keywords = #{Keywords}
+    </select>
+    
+</mapper>

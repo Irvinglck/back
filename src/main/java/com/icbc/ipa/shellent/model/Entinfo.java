@@ -3,6 +3,8 @@ package com.icbc.ipa.shellent.model;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.Date;
+
 @Data
 @Accessors(chain = true)
 public class Entinfo {
@@ -12,20 +14,22 @@ public class Entinfo {
     /**
      * 流水号
      */
-    private Long id;
+    private Integer Id;
 
-    private String entinfoId;//企业id
+    private String EntId;//企业id
 
-    private String entName;//企业名称
+    private String EntName;//企业名称
 
-    private String creditCode;
+    private String CreditCode;
 
-    private String regno;
+    private String RegNo;
 
-    private String baseData;
+    private  String EntStatus;
 
-    private String createTime;
+    private String EmptyShellContent;
 
-    private String updateTime;
+    private Date CreateTime;
+
+    private Date UpdateTime;
 
 }

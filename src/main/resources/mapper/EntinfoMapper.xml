@@ -3,102 +3,137 @@
 <mapper namespace="com.icbc.ipa.shellent.dao.EntinfoDao">
 
     <sql id="BASE_COLUMN">
-        ID,ENTINFOID,ENTNAME,CREDITCODE,REGNO,BASEDATA,CREATETIME,UPDATETIME
+          Id,EntId, EntName,CreditCode,RegNo,EntStatus,EmptyShellContent,CreateTime,UpdateTime
     </sql>
 
     <sql id="BASE_TABLE">
-  	 RC_SHELLENT_ENTINFO
-   </sql>
+  	  IDX_EMPTY_SHELL_TEMP_EntId
+    </sql>
 
-    <insert id="add" parameterType="com.icbc.ipa.shellent.model.Entinfo">
+    <insert id="addOne" parameterType="com.icbc.ipa.shellent.model.Entinfo">
         INSERT INTO
         <include refid="BASE_TABLE"/>
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="entinfoId != null">
-                entinfo_id,
+            <if test="EntId != null">
+                EntId,
             </if>
-            <if test="entName != null">
-                ent_name,
+            <if test="EntName != null">
+                EntName,
             </if>
-             <if test="creditCode != null">
-                 credit_code,
+            <if test="CreditCode != null">
+                CreditCode,
             </if>
-            <if test="regno != null">
-                regno,
+            <if test="RegNo != null">
+                RegNo,
             </if>
-            <if test="baseData != null">
-                base_data,
+            <if test="EntStatus != null">
+                EntStatus,
             </if>
-            <if test="createTime != null">
-                create_time,
+            <if test="EmptyShellContent != null">
+                EmptyShellContent,
             </if>
-            <if test="updateTime != null">
-                update_time,
+            <if test="CreateTime != null">
+                CreateTime,
+            </if>
+            <if test="UpdateTime != null">
+                UpdateTime,
             </if>
 
         </trim>
         <trim prefix="VALUES(" suffix=")" suffixOverrides=",">
-            <if test="entinfoId != null">
-                #{entinfoId},
+            <if test="EntId != null">
+                #{EntId},
             </if>
-            <if test="entName != null">
-                #{entName},
+            <if test="EntName != null">
+                #{EntName},
             </if>
-            <if test="creditCode != null">
-                #{creditCode},
+            <if test="CreditCode != null">
+                #{CreditCode},
             </if>
-            <if test="regno != null">
-                #{regno},
+            <if test="RegNo != null">
+                #{RegNo},
             </if>
-            <if test="baseData != null">
-                #{baseData},
+            <if test="EntStatus != null">
+                #{EntStatus},
             </if>
-            <if test="createTime != null">
-                #{createTime},
+            <if test="EmptyShellContent != null">
+                #{EmptyShellContent},
             </if>
-            <if test="updateTime != null">
-                #{updateTime},
+            <if test="CreateTime != null">
+                #{CreateTime},
+            </if>
+            <if test="UpdateTime != null">
+                #{UpdateTime},
             </if>
         </trim>
     </insert>
 
+    <insert id="addBatch" parameterType="java.util.List">
+        <selectKey resultType="java.lang.Integer" keyProperty="Id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO
+        <include refid="BASE_TABLE"/>
+        (EntId, EntName,CreditCode,RegNo,EntStatus,EmptyShellContent,CreateTime,UpdateTime)
+        VALUES
+        <foreach collection="entInfoList" item="entinfo" index="index" separator=",">
+            (#{entinfo.EntId}, #{entinfo.EntName}, #{entinfo.CreditCode}, #{entinfo.RegNo}, #{entinfo.EntStatus},
+            #{entinfo.EmptyShellContent}, #{entinfo.CreateTime} , #{entinfo.UpdateTime})
+        </foreach>
+    </insert>
 
     <update id="update" parameterType="com.icbc.ipa.shellent.model.Entinfo">
         UPDATE
         <include refid="BASE_TABLE"/>
         <set>
             <trim>
-                <if test="entName != null">
-                    ent_name= #{entName},
+                <if test="EntName != null">
+                    EntName= #{EntName},
                 </if>
-                <if test="creditCode != null">
-                    credit_code = #{creditCode},
+                <if test="CreditCode != null">
+                    CreditCode = #{CreditCode},
                 </if>
-                <if test="regno != null">
-                    regno = #{regno},
+                <if test="RegNo != null">
+                    RegNo = #{RegNo},
                 </if>
-                <if test="baseData != null">
-                    base_data = #{baseData},
+                <if test="EntStatus != null">
+                    EntStatus = #{EntStatus},
                 </if>
-                <if test="createTime != null">
-                    create_time = #{createTime},
+                <if test="EmptyShellContent != null">
+                    EmptyShellContent = #{EmptyShellContent},
                 </if>
-                <if test="updateTime != null">
-                    update_time = #{updateTime},
+                <if test="CreateTime != null">
+                    CreateTime = #{CreateTime},
+                </if>
+                <if test="UpdateTime != null">
+                    UpdateTime = #{UpdateTime},
                 </if>
             </trim>
         </set>
-        WHERE entinfoId = #{entinfoId}
+        WHERE EntId = #{EntId}
     </update>
 
     <select id="findOne" resultType="com.icbc.ipa.shellent.model.Entinfo" parameterType="java.lang.String">
-    	select <include refid="BASE_COLUMN"/> from <include refid="BASE_TABLE"/> where  entinfoId = #{entinfoId}
+        select
+        <include refid="BASE_COLUMN"/>
+        from
+        <include refid="BASE_TABLE"/>
+        where EntId = #{EntId}
     </select>
 
     <delete id="delete" parameterType="com.icbc.ipa.shellent.model.Entinfo">
         DELETE FROM
         <include refid="BASE_TABLE"/>
-        WHERE entinfoId = #{entinfoId}
+        WHERE EntId = #{EntId}
     </delete>
+
+    <select id="isNull" resultType="Integer">
+        select id from IDX_EMPTY_SHELL_TEMP_EntId limit 1
+    </select>
+
+    <update id="truncateTable">
+        truncate table
+        <include refid="BASE_TABLE"/>
+    </update>
 
 </mapper>
